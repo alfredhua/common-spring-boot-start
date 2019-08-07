@@ -1,1 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.common.mail.MailAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.common.mail.MailAutoConfiguration,\
+com.common.redis.RedisManager

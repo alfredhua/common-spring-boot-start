@@ -18,7 +18,6 @@ public class MailAutoConfiguration {
   private MailProperties mailProperties;
 
   @Bean
-//  @ConditionalOnMissingBean(MailUtils.class)
   public MailUtils mailUtils() {
     return new MailUtils(mailProperties);
   }
