@@ -20,6 +20,7 @@ public class RedisOptions {
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         Jackson2JsonRedisSerializer<T> tmp0=new Jackson2JsonRedisSerializer<T>(tClass);
         tmp0.setObjectMapper(objectMapper);
+        redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.setValueSerializer(tmp0);
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.afterPropertiesSet();
@@ -28,6 +29,7 @@ public class RedisOptions {
 
     public static<T> ValueOperations<String, T>  createListOptions(RedisConnectionFactory connectionFactory){
         RedisTemplate<String, T> redisTemplate = new RedisTemplate<String, T>();
+        redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(connectionFactory);

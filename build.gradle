@@ -31,8 +31,10 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     compile("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
     compile("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
+
     compile("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor ("org.projectlombok:lombok:$lombokVersion")
+
     compile("org.apache.httpcomponents:httpclient:$httpclientVersion")
     compile ("javax.mail:mail:$mailVersion")
     compile("com.alibaba:fastjson:$fastJsonVersion")

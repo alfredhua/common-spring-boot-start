@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -42,7 +42,7 @@ public class LoggingAspect {
         StringBuffer stringBuffer = new StringBuffer();
         Method method = getMethod(joinPoint);
         stringBuffer.append("请求方法名称:" + method.getName() + ",");
-        List args = filter(joinPoint.getArgs(), method);
+        java.util.List args = filter(joinPoint.getArgs(), method);
         if (args!=null&&args.size() > 0) {
             for (Object arg : args) {
                 stringBuffer.append("请求参数:" + JSON.toJSON(arg)+ ",");
@@ -71,7 +71,7 @@ public class LoggingAspect {
         return methodSignature.getMethod();
     }
 
-    private List filter(Object[] args, Method targetMethod) {
+    private java.util.List filter(Object[] args, Method targetMethod) {
         Annotation[][] annotationList = targetMethod.getParameterAnnotations();
         List list=new ArrayList();
         for (int i = 0; i < annotationList.length; i++) {

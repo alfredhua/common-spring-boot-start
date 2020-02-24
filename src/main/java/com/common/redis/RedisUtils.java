@@ -1,4 +1,4 @@
-package com.common.utils;
+package com.common.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -11,7 +11,7 @@ public class RedisUtils {
 
 
   public RedisUtils(ValueOperations<String, Object> objectValueOperation, ValueOperations<String, String> stringValueOperation,
-                    ValueOperations<String, List> listValueOperation) {
+                    ValueOperations<String, java.util.List> listValueOperation) {
     this.objectValueOperation = objectValueOperation;
     this.stringValueOperation = stringValueOperation;
     this.listValueOperation = listValueOperation;
@@ -23,7 +23,7 @@ public class RedisUtils {
 
   private ValueOperations<String,String> stringValueOperation;
 
-  private ValueOperations<String, List> listValueOperation;
+  private ValueOperations<String, java.util.List> listValueOperation;
 
 
   /**
@@ -126,7 +126,7 @@ public class RedisUtils {
    * @param t
    * @return
    */
-  public void  setList(String key,Long timeout, List t){
+  public void  setList(String key,Long timeout, java.util.List t){
     try {
       if (timeout==null) {
         listValueOperation.set(key, t, defaultTimeOut, TimeUnit.SECONDS);
@@ -144,7 +144,7 @@ public class RedisUtils {
    * @param <T>
    * @return
    */
-  public<T> List<T>  getList(String key)  {
+  public<T> List<T> getList(String key)  {
     try {
       return listValueOperation.get(key);
     }catch ( Exception e){

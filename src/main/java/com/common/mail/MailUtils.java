@@ -1,15 +1,11 @@
-package com.common.utils;
+package com.common.mail;
 
-import com.common.mail.MailProperties;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.security.Security;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class MailUtils {
 
@@ -19,9 +15,9 @@ public class MailUtils {
     this.mailProperties = mailProperties;
   }
 
-  public void sendMail(List<String> toMailList, String title, String context)throws Exception {
+  public void sendMail(java.util.List<String> toMailList, String title, String context)throws Exception {
 
-    Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+    java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
     final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
     Properties props = new Properties();
     props .setProperty("mail.smtp.host",mailProperties.getMail_host()); // 设置邮件服务器
