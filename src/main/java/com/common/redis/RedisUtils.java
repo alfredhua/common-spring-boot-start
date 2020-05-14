@@ -1,154 +1,157 @@
 package com.common.redis;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.core.*;
+import org.springframework.util.CollectionUtils;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class RedisUtils {
 
+  private static final long DEFAULT_TIME_OUT=30*24*60;
 
-  public RedisUtils(ValueOperations<String, Object> objectValueOperation, ValueOperations<String, String> stringValueOperation,
-                    ValueOperations<String, java.util.List> listValueOperation) {
-    this.objectValueOperation = objectValueOperation;
-    this.stringValueOperation = stringValueOperation;
-    this.listValueOperation = listValueOperation;
+  private RedisTemplate<String,Object> template;
+
+  public RedisUtils(RedisTemplate<String, Object> template) {
+    this.template = template;
   }
-
-  private long defaultTimeOut=30*24*60;
-
-  private ValueOperations<String,Object> objectValueOperation;
-
-  private ValueOperations<String,String> stringValueOperation;
-
-  private ValueOperations<String, java.util.List> listValueOperation;
 
 
   /**
-   * Object实体类型存储
-   * @param key  key
-   * @param timeout 秒
-   * @param t    value
-   * @return
+   * 设置过期时间，默认单位秒
+   * @param key key
+   * @param timeout 过期时间
    */
-  public void  set(String key,long timeout, Object t){
-    try {
-      if (timeout==0) {
-        objectValueOperation.set(key, t, defaultTimeOut, TimeUnit.SECONDS);
-      } else{
-        objectValueOperation.set(key, t, timeout, TimeUnit.SECONDS);
-      }
-    }catch (Exception e){
-      throw new RuntimeException("set error",e);
-    }
-  }
-
   public void expire(String key,long timeout){
     if (timeout==0) {
-      objectValueOperation.getOperations().expire(key, defaultTimeOut, TimeUnit.SECONDS);
+      template.expire(key, DEFAULT_TIME_OUT, TimeUnit.SECONDS);
     }else{
-      objectValueOperation.getOperations().expire(key, timeout, TimeUnit.SECONDS);
+      template.expire(key, timeout, TimeUnit.SECONDS);
     }
   }
 
   /**
-   * Object类型获取
-   * @param key
-   * @param tClass
-   * @param <T>
-   * @return
+   * 根据key 获取过期时间
+   * @param key 键 不能为null
+   * @return 时间(秒) 返回0代表为永久有效
    */
-  public <T>  T get(String key,Class<T> tClass)  {
-    try {
-      ObjectMapper mapper = new ObjectMapper();
-      mapper.registerModule(new JavaTimeModule());
-      Object o = objectValueOperation.get(key);
-      return mapper.readValue(mapper.writeValueAsString(o), tClass);
-    }catch ( Exception e){
-      throw new RuntimeException("redis get error",e);
-    }
+  public Long getExpire(String key) {
+    return template.getExpire(key, TimeUnit.SECONDS);
   }
 
+  /**
+   * 验证key是否存在
+   * @param key key
+   */
+  public Boolean hasKey(String key) {
+    return template.hasKey(key);
+  }
 
-  public boolean del(String key) {
-    if ("".equals(key)){
-      return false;
-    }else {
-      Boolean delete = objectValueOperation.getOperations().delete(key);
-      if (delete == null) {
-        return true;
+  /**
+   * 删除
+   * @param key key
+   */
+  public void del(String... key) {
+    if (key != null && key.length > 0) {
+      if (key.length == 1) {
+        template.delete(key[0]);
       } else {
-        return delete;
+        template.delete(CollectionUtils.arrayToList(key));
       }
     }
-
   }
 
   /**
-   * String类型存储
-   * @param key
-   * @param timeout
+   * Object类型存储
+   * @param key  key
+   * @param timeout 过期时间，0：表示使用默认30天,null：表示永不过期
    * @param value
    */
-  public void setStr(String key,long timeout,String value){
+  public void set(String key,Long timeout,Object value){
     try {
-      if (timeout==0) {
-        stringValueOperation.set(key, value, defaultTimeOut, TimeUnit.SECONDS);
+      if (timeout==null){
+        template.opsForValue().set(key, value);
+      }else if (timeout==0) {
+        template.opsForValue().set(key, value, DEFAULT_TIME_OUT, TimeUnit.SECONDS);
       }else{
-        stringValueOperation.set(key, value, timeout, TimeUnit.SECONDS);
+        template.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
       }
     }catch (Exception e){
       throw new RuntimeException("set error",e);
     }
   }
-
   /**
-   * String 类型获取
+   * Object 类型获取
    * @param key
    * @return
    */
-  public String  getStr(String key){
+  public Object get(String key){
     try {
-      return stringValueOperation.get(key);
+      return template.opsForValue().get(key);
     }catch ( Exception e){
       throw new RuntimeException("redis get error",e);
     }
   }
 
+  /**
+   * 递增
+   * @param key  key
+   * @param delta 递增因子，0或者null时候：默认是1,负数表示递减。
+   * @return
+   */
+  public Long increment(String key, Long delta) {
+    if(delta==null||delta==0){
+      return template.opsForValue().increment(key, 1L);
+    }
+    return template.opsForValue().increment(key, delta);
+  }
+
+
 
 
   /**
-   * Object实体类型存储
-   * @param key
-   * @param timeout
-   * @param t
-   * @return
+   * HashGet
+   *
+   * @param key  键 不能为null
+   * @param item 项 不能为null
+   * @return 值
    */
-  public void  setList(String key,Long timeout, java.util.List t){
-    try {
-      if (timeout==null) {
-        listValueOperation.set(key, t, defaultTimeOut, TimeUnit.SECONDS);
-      } else{
-        listValueOperation.set(key, t, timeout, TimeUnit.SECONDS);
-      }
-    }catch (Exception e){
-      throw new RuntimeException("set error",e);
-    }
+  public Object hashGet(String key, String item) {
+    return template.opsForHash().get(key, item);
   }
 
   /**
-   * Object类型获取
-   * @param key
-   * @param <T>
+   * 向一张hash表中放入数据,如果不存在将创建
+   * @param key   键
+   * @param item  项
+   * @param value 值
+   */
+  public void hashSet(String key, String item, Object value) {
+      template.opsForHash().put(key, item, value);
+  }
+
+
+  /**
+   * 从redis中随机返回一个key
    * @return
    */
-  public<T> List<T> getList(String key)  {
-    try {
-      return listValueOperation.get(key);
-    }catch ( Exception e){
-      throw new RuntimeException("redis get error",e);
-    }
+  public Object randomKey() {
+    return template.randomKey();
   }
+
+  /**
+   * 返回 key 所储存的值的类型
+   * @param key
+   * @return
+   */
+  public DataType getType(String key) {
+    return template.type(key);
+  }
+
+
+
+
+
+
+
 }

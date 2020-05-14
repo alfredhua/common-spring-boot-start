@@ -1,5 +1,7 @@
 package com.common.redis;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,26 +16,23 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 public class RedisOptions {
 
-    public static<T> ValueOperations<String, T>  createValueOptions(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper, Class<T> tClass){
-        RedisTemplate<String, T> redisTemplate = new RedisTemplate<String, T>();
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        Jackson2JsonRedisSerializer<T> tmp0=new Jackson2JsonRedisSerializer<T>(tClass);
-        tmp0.setObjectMapper(objectMapper);
-        redisTemplate.setEnableTransactionSupport(true);
-        redisTemplate.setValueSerializer(tmp0);
-        redisTemplate.setConnectionFactory(connectionFactory);
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate.opsForValue();
-    }
+    public static<T> RedisTemplate<String, T> createRedisTemplate(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper, Class<T> tClass){
+        RedisTemplate<String, T> redisTemplate = new RedisTemplate<>();
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<Object>(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
 
-    public static<T> ValueOperations<String, T>  createListOptions(RedisConnectionFactory connectionFactory){
-        RedisTemplate<String, T> redisTemplate = new RedisTemplate<String, T>();
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+
         redisTemplate.setEnableTransactionSupport(true);
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.afterPropertiesSet();
-        return redisTemplate.opsForValue();
+        return redisTemplate;
     }
 }

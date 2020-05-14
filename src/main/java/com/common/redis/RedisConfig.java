@@ -16,9 +16,6 @@ public class RedisConfig {
     @Bean
     public RedisUtils redisUtils(@Autowired RedisConnectionFactory connectionFactory,
                                  @Autowired ObjectMapper objectMapper){
-        return new RedisUtils(
-                RedisOptions.createValueOptions(connectionFactory,objectMapper,Object.class),
-                RedisOptions.createValueOptions(connectionFactory,objectMapper,String.class),
-                RedisOptions.createListOptions(connectionFactory));
+        return new RedisUtils(RedisOptions.createRedisTemplate(connectionFactory,objectMapper,Object.class));
     }
 }
