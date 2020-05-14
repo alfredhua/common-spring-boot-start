@@ -4,6 +4,8 @@ import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.*;
 import org.springframework.util.CollectionUtils;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class RedisUtils {
@@ -107,28 +109,58 @@ public class RedisUtils {
   }
 
 
-
-
   /**
    * HashGet
    *
    * @param key  键 不能为null
-   * @param item 项 不能为null
+   * @param field 项 不能为null
    * @return 值
    */
-  public Object hashGet(String key, String item) {
-    return template.opsForHash().get(key, item);
+  public Object hashGet(String key, String field) {
+    return template.opsForHash().get(key, field);
   }
 
   /**
    * 向一张hash表中放入数据,如果不存在将创建
    * @param key   键
-   * @param item  项
+   * @param field  项
    * @param value 值
    */
-  public void hashSet(String key, String item, Object value) {
-      template.opsForHash().put(key, item, value);
+  public void hashSet(String key, String field, Object value) {
+      template.opsForHash().put(key, field, value);
   }
+
+  /**
+   *
+   * @param key key
+   * @param map 对象
+   */
+  public void hashPutAll(String key, Map<Object, Object> map){
+    template.opsForHash().putAll(key,map);
+  }
+
+  /**
+   * 获取map
+   * @param key
+   * @return
+   */
+  public Map<Object, Object> hashGetAll(String key){
+    return template.opsForHash().entries(key);
+  }
+
+  /**
+   * 返回这个key里面所有fields的值
+   * @param key
+   * @param fields
+   * @return
+   */
+  public List<Object> multiHashGet(String key, String...fields) {
+    return template.opsForHash().multiGet(key, CollectionUtils.arrayToList(fields));
+  }
+
+
+
+
 
 
   /**
@@ -147,10 +179,6 @@ public class RedisUtils {
   public DataType getType(String key) {
     return template.type(key);
   }
-
-
-
-
 
 
 
