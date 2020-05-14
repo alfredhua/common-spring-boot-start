@@ -106,9 +106,9 @@ public class RedisUtils {
    * @param key
    * @return
    */
-  public Object objectGet(String key){
+  public <T> T objectGet(String key){
     try {
-      return template.opsForValue().get(key);
+      return (T) template.opsForValue().get(key);
     }catch ( Exception e){
       throw new RuntimeException("redis get error",e);
     }
