@@ -1,12 +1,14 @@
 package com.common.redis;
 
 import org.springframework.data.redis.connection.DataType;
-import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -14,24 +16,12 @@ public class RedisUtils {
 
   private static final long DEFAULT_TIME_OUT=30*24*60;
 
-  private static final String PREX_LOAK="redis_lock";
-
 
   private RedisTemplate<String,Object> template;
 
   public RedisUtils(RedisTemplate<String, Object> template) {
     this.template = template;
   }
-
-
-  public boolean lock(String key,String value){
-//    Boolean locked= template.opsForValue().setIfAbsent(PREX_LOAK + key, value);
-//    if (locked) {
-//      template.expire(key, expire, TimeUnit.SECONDS);
-//    }
-    return true;
-  }
-
 
 
   /**

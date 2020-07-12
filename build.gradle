@@ -35,8 +35,12 @@ ext{
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+
     compile("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
+    compile group: 'org.redisson', name: 'redisson-spring-boot-starter', version: '3.13.2'
+
     compile("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
+
 
     compile("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor ("org.projectlombok:lombok:$lombokVersion")
