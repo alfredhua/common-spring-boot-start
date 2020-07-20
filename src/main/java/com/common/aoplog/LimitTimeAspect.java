@@ -1,8 +1,8 @@
 package com.common.aoplog;
 
 
-import com.alibaba.fastjson.JSON;
 import com.common.constants.LimitTimeTypeEnum;
+import com.common.util.GsonUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -156,7 +156,7 @@ public class LimitTimeAspect {
         List args = filter(joinPoint.getArgs(), method);
         if (args!=null&&args.size() > 0) {
             for (Object arg : args) {
-                stringBuffer.append("请求参数:" + JSON.toJSON(arg)+ ",");
+                stringBuffer.append("请求参数:" + GsonUtils.toJSON(arg)+ ",");
             }
         }
         return stringBuffer.toString();

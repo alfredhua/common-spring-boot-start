@@ -27,28 +27,27 @@ repositories {
 }
 ext{
     lombokVersion="1.18.6"
-    springBootVersion = "2.1.3.RELEASE"
+    springBootVersion = "2.2.5.RELEASE"
     httpclientVersion="4.5.1"
     mailVersion="1.4"
-    fastJsonVersion="1.2.51"
+    gsonVersion="2.8.6"
+    jedisVersion="2.9.1"
+    redissonVersion="3.13.2"
 }
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-
     compile("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
-    compile group: 'org.redisson', name: 'redisson-spring-boot-starter', version: '3.13.2'
-
+    compile("org.redisson:redisson-spring-boot-starter:$redissonVersion")
     compile("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
-
 
     compile("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor ("org.projectlombok:lombok:$lombokVersion")
 
     compile("org.apache.httpcomponents:httpclient:$httpclientVersion")
     compile ("javax.mail:mail:$mailVersion")
-    compile("com.alibaba:fastjson:$fastJsonVersion")
-    compile group: 'redis.clients', name: 'jedis', version: '2.9.1'
+    compile ("redis.clients:jedis:$jedisVersion")
+    compile("com.google.code.gson:gson:$gsonVersion")
     testCompile ('junit:junit:4.12')
 
 }

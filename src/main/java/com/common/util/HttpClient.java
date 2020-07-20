@@ -1,12 +1,10 @@
 package com.common.util;
 
-import com.alibaba.fastjson.JSON;
-import org.apache.http.HttpEntity;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.Registry;
@@ -20,7 +18,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.util.StringUtils;
 
@@ -41,6 +38,7 @@ public class HttpClient {
 
     static  String defaultContentType="application/json; charset=utf-8";
 
+    static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
     public static String get(String url, java.util.Map<String,String> parms)throws  Exception {
         String urlparms="";
@@ -69,7 +67,7 @@ public class HttpClient {
         }
         requestPost.addHeader("Content-type",contentType);
         requestPost.setHeader("Accept", "application/json");
-        requestPost.setEntity(new StringEntity(JSON.toJSONString(paramsMap),"UTF-8"));
+        requestPost.setEntity(new StringEntity(GsonUtils.toJSON(paramsMap),"UTF-8"));
         HttpResponse response = httpClient.execute(requestPost);
         String result= EntityUtils.toString(response.getEntity(),"utf-8"); //body
         return result;
