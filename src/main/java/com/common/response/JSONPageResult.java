@@ -30,7 +30,7 @@ public class JSONPageResult<T> implements java.io.Serializable {
     }
 
 
-    public static<T> JSONPageResult<T> listError(){
+    public static JSONPageResult listError(){
         return new JSONPageResult("LIST_ERROR","列表获取失败");
     }
 

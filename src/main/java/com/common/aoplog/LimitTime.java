@@ -25,7 +25,7 @@ public @interface LimitTime {
      * 限制方式
      * @return
      */
-    LimitTimeTypeEnum type() default LimitTimeTypeEnum.LIMIT;
+    LimitTimeTypeEnum type() default LimitTimeTypeEnum.NULL;
 
     /**
      * 超时时间 默认300毫秒

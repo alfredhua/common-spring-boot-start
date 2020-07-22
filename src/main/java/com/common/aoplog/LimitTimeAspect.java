@@ -45,19 +45,24 @@ public class LimitTimeAspect {
     @Around("aroundLimitTime()")
     public Object advice(ProceedingJoinPoint joinPoint)throws Throwable {
         long startTime = System.currentTimeMillis();
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
         Method method = getMethod(joinPoint);
-        stringBuffer.append("请求方法名称:" + method.getName() + ",");
+        stringBuffer.append("请求方法名称:").append(method.getName()).append(",");
         stringBuffer.append(getParamsStr(joinPoint, method));
         //处理限制策略
+        if (method.getAnnotation(LimitTime.class).type()==LimitTimeTypeEnum.NULL){
+            Object proceed = joinPoint.proceed(joinPoint.getArgs());
+            logger.info(stringBuffer.append("请求耗时:").append(System.currentTimeMillis() - startTime).append("耗秒.").toString());
+            return proceed;
+        }
+
         Object returnObject;
         if (method.getAnnotation(LimitTime.class).type()== LimitTimeTypeEnum.LIMIT){
             returnObject=limit(joinPoint);
         }else {
             returnObject=timeout(joinPoint);
         }
-        stringBuffer.append("请求耗时:" + (System.currentTimeMillis() - startTime) + "耗秒.");
-        logger.info(stringBuffer.toString());
+        logger.info(stringBuffer.append("请求耗时:" + (System.currentTimeMillis() - startTime) + "耗秒.").toString());
         return returnObject;
     }
 

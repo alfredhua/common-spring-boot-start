@@ -17,7 +17,7 @@ public class MessageDigestUtil {
     }
 
     public static String resetPassword() throws Exception{
-        return MessageDigestUtil.base64AndMD5("000000");
+        return base64AndMD5("000000");
     }
 
 

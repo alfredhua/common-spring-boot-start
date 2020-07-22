@@ -7,7 +7,7 @@
 
     limitValue
 
-    type：默认：LimitTimeTypeEnum.LIMIT，
+    type：默认：LimitTimeTypeEnum.NULL,其它：LimitTimeTypeEnum.LIMIT，LimitTimeTypeEnum.TIMEOUT
 
     timeValues：接口超时时间：LimitTimeTypeEnum.TIMEOUT 时生效。
 
@@ -50,16 +50,13 @@
 # util
     GsonUtils：gson的转换
     HttpClient：对http的get和post进行封装。默认是json请求
-    IDGenerate：
+    IDGenerate：分布式ID生成策略，配置机器的hostname
+    MessageDigestUtil：镜像base64还有MD5加密
+    PageUtil：进行分页
+    BeanCopyUtil：进行实体之间对象属性copy
 
 ## BeanCopyUtil
     主要做实体之间的转换，主要对BeanUtils.copyProperties进行了二次封装
-
-## 
-    是分布式下的id的生成方式
-
-## PageUtil
-    是对page做了一个封装
 
 
 

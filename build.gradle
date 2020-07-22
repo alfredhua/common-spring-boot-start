@@ -10,7 +10,7 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'maven' // 引入maven插件
+apply plugin: 'maven'
 
 group 'com.common'
 version '1.0.0'
