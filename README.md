@@ -39,6 +39,7 @@
         mail.email_password= password
         mail.mail_host= smtp.mxhichina.com
         mail.to_mail= mail@qq.com
+    
     使用:
         @Autowired
         MailUtils mailUtils;
