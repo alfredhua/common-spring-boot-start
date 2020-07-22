@@ -38,7 +38,6 @@ public class HttpClient {
 
     static  String defaultContentType="application/json; charset=utf-8";
 
-    static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 
     public static String get(String url, java.util.Map<String,String> parms)throws  Exception {
         String urlparms="";

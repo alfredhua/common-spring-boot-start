@@ -52,25 +52,3 @@ dependencies {
 
 }
 
-jar {
-    enabled=true
-}
-
-// 指定上传的路径
-def localMavenRepo = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: localMavenRepo)
-            //构造项目的Pom文件
-            pom.project {
-                name = project.name
-                packaging = 'jar'
-                description = 'description'
-            }
-        }
-
-    }
-}
-defaultTasks 'clean','uploadArchives'

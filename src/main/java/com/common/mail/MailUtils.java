@@ -5,7 +5,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 public class MailUtils {
 
@@ -15,8 +18,15 @@ public class MailUtils {
     this.mailProperties = mailProperties;
   }
 
-  public void sendMail(java.util.List<String> toMailList, String title, String context)throws Exception {
 
+  public void sendMail(String toMail,String title, String context)throws Exception {
+    List<String> list=new ArrayList<>();
+    list.add(toMail);
+    sendMails(list, title,context);
+  }
+
+
+  public void sendMails(List<String> toMailList, String title, String context)throws Exception {
     java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
     final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
     Properties props = new Properties();
@@ -50,7 +60,7 @@ public class MailUtils {
     msg.setSentDate(new Date());
     msg.setSubject(title);
     Transport transport = session.getTransport();
-    transport.send(msg);
+    Transport.send(msg);
     transport.close();
   }
 

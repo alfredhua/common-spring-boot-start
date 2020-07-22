@@ -1,33 +1,61 @@
 # common-spring-boot-start
-    采用Spring-boot-start进行打包，作为一个共有的模块即可自动引入
+    采用Spring-boot-start进行打包，作为一个共有的模块即可自动引入,执行./gradlew install 即可打成jar包并且加入到maven仓库。
 
-# Logging
-    在controller上中的方法直接@Logging即可进行日志参数打印
+
+# LimitTime
+    在方法直接加注解@LimitTime即可
+
+    limitValue
+
+    type：默认：LimitTimeTypeEnum.LIMIT，
+
+    timeValues：接口超时时间：LimitTimeTypeEnum.TIMEOUT 时生效。
+
+    timeUnit：接口超时时间单位：LimitTimeTypeEnum.TIMEOUT 时生效。
+
+    fallback：补偿方法，默认可以为空
+
 
 # redis
-    配置文件中直接配置即可使用，例如：
+    配置：
     spring.redis.host= 127.0.0.1
     spring.redis.port= 6379
+    spring.redis.password= 
+    如果需要配置redisson分布式锁增加配置文件即可。
+    spring.redis.redisson.config = redisson.yaml
+
+    使用：
+        @Autowired
+        RedisUtils redisUtils;  
+
+        @Autowired
+        RedisLockUtils redisLockUtils;  
+
 
 # mail
-    对邮件发送进行了二次封装，例如：
+    对邮件发送进行了封装，修改配置文件:
+        mail.port= 465
+        mail.email_name= a@qq.com
+        mail.email_password= password
+        mail.mail_host= smtp.mxhichina.com
+        mail.to_mail= mail@qq.com
+    使用:
+        @Autowired
+        MailUtils mailUtils;
 
-    mail.port= 465
-    mail.email_name= a@qq.com
-    mail.email_password= iw078Kz58X6
-    mail.mail_host= smtp.mxhichina.com
-    mail.to_mail= hua_zhenguo@163.com
+    
 
 # request response
     公有参数请求和公有的返回
 # util
+    GsonUtils：gson的转换
+    HttpClient：对http的get和post进行封装。默认是json请求
+    IDGenerate：
 
 ## BeanCopyUtil
     主要做实体之间的转换，主要对BeanUtils.copyProperties进行了二次封装
-## HttpClient
-    是对http请求做了封装，Get和post
 
-## IDGenerate
+## 
     是分布式下的id的生成方式
 
 ## PageUtil
