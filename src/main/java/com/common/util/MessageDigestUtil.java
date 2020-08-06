@@ -1,14 +1,16 @@
 package com.common.util;
 
-import com.common.constants.util.Constants;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class MessageDigestUtil {
-    
+
+
+    public static final String ENCODING = "UTF-8";
+
+
     public static String base64AndMD5(String str) throws UnsupportedEncodingException {
         if (str == null) {
             throw new IllegalArgumentException("inStr can not be null");
@@ -36,7 +38,7 @@ public class MessageDigestUtil {
     }
 
      static byte[] toBytes(final String str) throws UnsupportedEncodingException {
-            return  str == null? null:str.getBytes(Constants.ENCODING);
+            return  str == null? null:str.getBytes(ENCODING);
     }
 
 }
