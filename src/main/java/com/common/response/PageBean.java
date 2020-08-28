@@ -10,7 +10,7 @@ public class PageBean<T> implements java.io.Serializable {
 
     private int page_num=0;
 
-    private int total;
+    private long total;
 
     private int page_size=10;
 
