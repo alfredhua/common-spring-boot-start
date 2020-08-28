@@ -11,7 +11,7 @@ import org.elasticsearch.client.Client;
  * @date 2020-08-28 14:46
  */
 
-public class EsTransportClient<V> {
+public class EsTransportClient<T> {
 
     private Client client;
 
@@ -19,7 +19,7 @@ public class EsTransportClient<V> {
         this.client = client;
     }
 
-    public void saveIndex(SettingName settingName,String id,V indexBean) throws Exception {
+    public void saveIndex(SettingName settingName,String id,T indexBean) throws Exception {
         client.prepareIndex(settingName.getIndexName(),settingName.getTypeName(),id)
                 .setSource(GsonUtils.toJSON(indexBean)).setRouting(id).execute().actionGet();
     }
