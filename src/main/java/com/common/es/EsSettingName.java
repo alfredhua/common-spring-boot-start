@@ -3,12 +3,12 @@ package com.common.es;
 import lombok.Data;
 
 /**
- *
+ * es的index和type
  * @author guozhenhua
  * @date 2020-08-28 16:25
  */
 @Data
-public class SettingName {
+public class EsSettingName {
 
     /**
      * index名称
@@ -20,12 +20,12 @@ public class SettingName {
      */
     String typeName;
 
-    public SettingName(String indexName, String typeName) {
+    public EsSettingName(String indexName, String typeName) {
         this.indexName = indexName;
         this.typeName = typeName;
     }
 
-    public static SettingName set(String indexName,String typeName){
-        return new SettingName(indexName,typeName);
+    public static EsSettingName set(String indexName,String typeName){
+        return new EsSettingName(indexName,typeName);
     }
 }

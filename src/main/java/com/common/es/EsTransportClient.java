@@ -19,9 +19,10 @@ public class EsTransportClient<T> {
         this.client = client;
     }
 
-    public void saveIndex(SettingName settingName,String id,T indexBean) throws Exception {
+    public void saveIndex(EsSettingName settingName,String id,T indexBean) throws Exception {
         client.prepareIndex(settingName.getIndexName(),settingName.getTypeName(),id)
-                .setSource(GsonUtils.toJSON(indexBean)).setRouting(id).execute().actionGet();
+                .setSource(GsonUtils.toJSON(indexBean))
+                .setRouting(id).execute().actionGet();
     }
 
 
