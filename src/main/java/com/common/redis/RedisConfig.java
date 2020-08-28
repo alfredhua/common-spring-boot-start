@@ -43,7 +43,7 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-    public static   RedisSerializer valueSerializer() {
+    public static RedisSerializer valueSerializer() {
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<Object>(Object.class);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
@@ -66,7 +66,6 @@ public class RedisConfig {
     public RedissonClient redisson() throws IOException {
         Config config = Config.fromYAML(new ClassPathResource("redisson.yaml").getInputStream());
         return Redisson.create(config);
-
     }
 
 }
