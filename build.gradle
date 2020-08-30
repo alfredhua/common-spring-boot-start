@@ -33,7 +33,7 @@ ext{
     gsonVersion="2.8.6"
     jedisVersion="2.9.1"
     redissonVersion="3.13.2"
-    transportVersion="5.6.3"
+    transportVersion="6.8.12"
 }
 
 dependencies {

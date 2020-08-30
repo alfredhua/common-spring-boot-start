@@ -1,12 +1,16 @@
 package com.common.es;
 
+import com.common.mail.MailProperties;
+import com.common.mail.MailUtils;
 import lombok.Data;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
@@ -14,35 +18,32 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.net.InetAddress;
 
-@Data
 @Configuration
 @ConditionalOnClass(EsTransportClient.class)
 @ConditionalOnProperty(prefix = "es", value = "enable", matchIfMissing = true)
+@EnableConfigurationProperties(value = EsProperties.class)
 public class EsConfig {
 
-    public String clusterName;
-
-    public String ips;
-
-    public boolean cluster;
+    @Autowired
+    EsProperties esProperties;
 
     @Bean
-    @ConditionalOnProperty(value = "es")
-    public EsTransportClient createClient() throws IOException {
+    public EsTransportClient esTransportClient() throws IOException {
         TransportClient client=null;
-        if (cluster){
+        if (esProperties.isCluster()){
             //集群模式，配置机器名称
-            Settings settings= Settings.builder().put("cluster.name",clusterName).put("client.transport.sniff", false).build();
+            Settings settings= Settings.builder().put("cluster.name",esProperties.getCluster_name()).put("client.transport.sniff", false).build();
             client = new PreBuiltTransportClient(settings);
         }else{
             //非集群运行
             client = new PreBuiltTransportClient(Settings.EMPTY);
         }
-        String[] ipPorts = ips.split(",");
+        System.out.printf("-----------init---------------");
+        String[] ipPorts = esProperties.getIps().split(",");
         for (String ipPort : ipPorts) {
             String[] ipPortArray = StringUtils.split(ipPort, ":");
             client.addTransportAddress(
-                    new InetSocketTransportAddress(InetAddress.getByName(ipPortArray[0]), Integer.parseInt(ipPortArray[1])));
+                    new TransportAddress(InetAddress.getByName(ipPortArray[0]), Integer.parseInt(ipPortArray[1])));
         }
         return new EsTransportClient(client);
     }
