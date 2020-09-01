@@ -16,7 +16,6 @@ public @interface LimitTime {
 
     /**
      * 最大限制数量，默认100个
-     *
      * @return
      */
     int limitValue() default 100;

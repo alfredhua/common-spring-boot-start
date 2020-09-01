@@ -32,29 +32,42 @@ public class EsTransportClient<T> {
         this.client = client;
     }
 
+    /**
+     * 保存
+     * @param settingName 索引和类型
+     * @param id id号
+     * @param indexBean bean
+     */
     public void saveIndex(EsSettingName settingName,String id,T indexBean) {
-
         client.prepareIndex(settingName.getIndexName(),settingName.getTypeName(),id)
                 .setSource(GsonUtils.toJSON(indexBean),XContentType.JSON)
                 .setRouting(id).execute().actionGet();
     }
 
-
+    /**
+     * 删除
+     * @param settingName 索引和类型
+     * @param id id号
+     */
     public  void deleteIndex(EsSettingName settingName,String id){
         client.prepareDelete(settingName.getIndexName(),settingName.getTypeName(),id).get();
     }
 
+    /**
+     * 获取
+     * @param searchBean 搜索的bean
+     * @param vClass  class
+     * @param pageSize 分页大小
+     * @param page  页码
+     * @param settingName 索引和类型
+     * @return
+     * @throws IllegalAccessException
+     */
     public PageBean<T> getIndexes(T searchBean, Class<T> vClass, int pageSize, int page, EsSettingName settingName) throws IllegalAccessException {
-
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(settingName.getIndexName())
                 .setTypes(settingName.getTypeName()).setSearchType(SearchType.QUERY_THEN_FETCH);
         searchRequestBuilder.setFrom(pageSize * (page - 1)).setSize(pageSize).setExplain(true);
-        Field[] fields = searchBean.getClass().getFields();
-        for (int i=0;i<fields.length;i++){
-            //如果searchbean上包含某些注解，则进行搜索
-            searchRequestBuilder.setQuery(QueryBuilders.matchQuery(fields[i].getName(),fields[i].get(fields[i].getName())));
-        }
-
+//        Field[] fields = searchBean.getClass().getFields();
         SearchResponse response = searchRequestBuilder.execute().actionGet();
         PageBean<T> indexBeans = new PageBean<>();
         indexBeans.setList(new ArrayList<>(pageSize));
@@ -67,8 +80,13 @@ public class EsTransportClient<T> {
         return indexBeans;
     }
 
-
-
+    /**
+     * 查找全部
+     * @param queryBuilder 查询条件
+     * @param settingName 索引和类型
+     * @param vClass class
+     * @return
+     */
     public List<T> searchAll(QueryBuilder queryBuilder,EsSettingName settingName, Class<T> vClass){
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(settingName.getIndexName())
                 .setTypes(settingName.getTypeName()).setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
@@ -85,7 +103,13 @@ public class EsTransportClient<T> {
         return client;
     }
 
-
+    /**
+     * 获取单个数据
+     * @param id  id号
+     * @param vClass class
+     * @param settingName 索引和类型
+     * @return 返回
+     */
     public T getByIndex(String id, Class<T> vClass, EsSettingName settingName) {
         GetResponse response = client.prepareGet(settingName.getIndexName(), settingName.getTypeName(), id).setRouting(id).execute().actionGet(1500);
         T indexBean = null;
