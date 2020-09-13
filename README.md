@@ -31,6 +31,15 @@
         @Autowired
         RedisLockUtils redisLockUtils;  
 
+## elasticsearch
+    配置：
+        es.cluster-name=elasticsearch
+        es.ips=192.168.1.2:9300,192.168.1.3:9300
+        es.cluster=false
+    使用：
+        @Autowired
+        EsTransportClient esTransportClient;  
+
 
 # mail
     对邮件发送进行了封装，修改配置文件:
@@ -55,6 +64,7 @@
     MessageDigestUtil：镜像base64还有MD5加密
     PageUtil：进行分页
     BeanCopyUtil：进行实体之间对象属性copy
+    SignUtil：签名
 
 ## BeanCopyUtil
     主要做实体之间的转换，主要对BeanUtils.copyProperties进行了二次封装
