@@ -1,8 +1,6 @@
 package com.common.es;
 
-import com.common.mail.MailProperties;
-import com.common.mail.MailUtils;
-import lombok.Data;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
@@ -14,12 +12,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
-
 import java.io.IOException;
 import java.net.InetAddress;
 
 @Configuration
-@ConditionalOnClass(EsTransportClient.class)
+@ConditionalOnClass(Client.class)
 @ConditionalOnProperty(prefix = "es", value = "enable", matchIfMissing = true)
 @EnableConfigurationProperties(value = EsProperties.class)
 public class EsConfig {
@@ -38,7 +35,7 @@ public class EsConfig {
             //非集群运行
             client = new PreBuiltTransportClient(Settings.EMPTY);
         }
-        System.out.printf("-----------init---------------");
+        System.out.println("-----------init---------------");
         String[] ipPorts = esProperties.getIps().split(",");
         for (String ipPort : ipPorts) {
             String[] ipPortArray = StringUtils.split(ipPort, ":");
