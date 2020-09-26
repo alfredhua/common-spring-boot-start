@@ -17,7 +17,7 @@ import java.net.InetAddress;
 
 @Configuration
 @ConditionalOnClass(Client.class)
-@ConditionalOnProperty(prefix = "es", value = "enable", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "es", value = "enable")
 @EnableConfigurationProperties(value = EsProperties.class)
 public class EsConfig {
 
