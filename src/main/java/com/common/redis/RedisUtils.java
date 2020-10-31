@@ -1,5 +1,7 @@
 package com.common.redis;
 
+import com.common.util.GsonUtils;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -95,11 +97,11 @@ public class RedisUtils {
   public void objectSet(String key,Long timeout,Object value){
     try {
       if (timeout==null){
-        template.opsForValue().set(key, value);
+        template.opsForValue().set(key, GsonUtils.toJSON(value));
       }else if (timeout==0) {
-        template.opsForValue().set(key, value, DEFAULT_TIME_OUT, TimeUnit.SECONDS);
+        template.opsForValue().set(key, GsonUtils.toJSON(value), DEFAULT_TIME_OUT, TimeUnit.SECONDS);
       }else{
-        template.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+        template.opsForValue().set(key, GsonUtils.toJSON(value), timeout, TimeUnit.SECONDS);
       }
     }catch (Exception e){
       throw new RuntimeException("set error",e);
@@ -110,9 +112,10 @@ public class RedisUtils {
    * @param key
    * @return
    */
-  public <T> T objectGet(String key){
+  public <T> T objectGet(String key,Class<T> tClass){
     try {
-      return (T) template.opsForValue().get(key);
+      String result = (String) template.opsForValue().get(key);
+      return GsonUtils.gson.fromJson(result,tClass);
     }catch ( Exception e){
       throw new RuntimeException("redis get error",e);
     }
