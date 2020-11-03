@@ -94,14 +94,14 @@ public class RedisUtils {
    * @param timeout 过期时间，0：表示使用默认30天,null：表示永不过期
    * @param value
    */
-  public void objectSet(String key,Long timeout,Object value){
+  public <T> void objectSet(String key,Long timeout,T value){
     try {
       if (timeout==null){
-        template.opsForValue().set(key, GsonUtils.toJSON(value));
+        template.opsForValue().set(key, value);
       }else if (timeout==0) {
-        template.opsForValue().set(key, GsonUtils.toJSON(value), DEFAULT_TIME_OUT, TimeUnit.SECONDS);
+        template.opsForValue().set(key,value, DEFAULT_TIME_OUT, TimeUnit.SECONDS);
       }else{
-        template.opsForValue().set(key, GsonUtils.toJSON(value), timeout, TimeUnit.SECONDS);
+        template.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
       }
     }catch (Exception e){
       throw new RuntimeException("set error",e);
@@ -112,10 +112,10 @@ public class RedisUtils {
    * @param key
    * @return
    */
-  public <T> T objectGet(String key,Class<T> tClass){
+  public <T> T objectGet(String key){
     try {
-      String result = (String) template.opsForValue().get(key);
-      return GsonUtils.gson.fromJson(result,tClass);
+
+      return (T) template.opsForValue().get(key);
     }catch ( Exception e){
       throw new RuntimeException("redis get error",e);
     }
