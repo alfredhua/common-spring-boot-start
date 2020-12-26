@@ -1,4 +1,4 @@
-package com.common.response;
+package com.common.domain.response;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;

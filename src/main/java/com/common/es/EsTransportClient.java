@@ -1,6 +1,6 @@
 package com.common.es;
 
-import com.common.response.PageBean;
+import com.common.domain.response.PageBean;
 import com.common.util.GsonUtils;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.elasticsearch.action.get.GetResponse;

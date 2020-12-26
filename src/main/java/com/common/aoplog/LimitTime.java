@@ -1,6 +1,6 @@
 package com.common.aoplog;
 
-import com.common.constants.LimitTimeTypeEnum;
+import com.common.domain.constants.LimitTimeTypeEnum;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;

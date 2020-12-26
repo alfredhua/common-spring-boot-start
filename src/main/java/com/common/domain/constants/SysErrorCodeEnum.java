@@ -1,4 +1,4 @@
-package com.common.constants;
+package com.common.domain.constants;
 
 import lombok.Getter;
 

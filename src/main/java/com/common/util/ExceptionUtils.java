@@ -1,7 +1,7 @@
 package com.common.util;
 
-import com.common.constants.SysErrorCodeEnum;
-import com.common.response.ErrorResponse;
+import com.common.domain.constants.SysErrorCodeEnum;
+import com.common.domain.response.ErrorResponse;
 
 public class ExceptionUtils {
 

@@ -1,7 +1,7 @@
 package com.common.aoplog;
 
 
-import com.common.constants.LimitTimeTypeEnum;
+import com.common.domain.constants.LimitTimeTypeEnum;
 import com.common.util.GsonUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;

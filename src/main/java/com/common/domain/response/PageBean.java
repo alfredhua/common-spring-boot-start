@@ -1,4 +1,4 @@
-package com.common.response;
+package com.common.domain.response;
 
 import lombok.Getter;
 import lombok.Setter;
