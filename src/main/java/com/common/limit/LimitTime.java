@@ -1,4 +1,4 @@
-package com.common.aoplog;
+package com.common.limit;
 
 import com.common.domain.constants.LimitTimeTypeEnum;
 

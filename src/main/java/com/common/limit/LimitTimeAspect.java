@@ -1,4 +1,4 @@
-package com.common.aoplog;
+package com.common.limit;
 
 
 import com.common.domain.constants.LimitTimeTypeEnum;
@@ -31,39 +31,27 @@ import java.util.concurrent.*;
 @Component
 public class LimitTimeAspect {
 
-
     private Logger logger = LoggerFactory.getLogger(LimitTimeAspect.class);
 
     private Map<Method, Semaphore> semaphoreCache = new ConcurrentHashMap<>();
 
     private ExecutorService executorService = Executors.newFixedThreadPool(9);
 
-    @Pointcut("@annotation(com.common.aoplog.LimitTime)")
+    @Pointcut("@annotation(com.common.limit.LimitTime)")
     public void aroundLimitTime() {
     }
 
     @Around("aroundLimitTime()")
     public Object advice(ProceedingJoinPoint joinPoint)throws Throwable {
-        long startTime = System.currentTimeMillis();
-        StringBuilder stringBuffer = new StringBuilder();
         Method method = getMethod(joinPoint);
-        stringBuffer.append("请求方法名称:").append(method.getName()).append(",");
-        stringBuffer.append(getParamsStr(joinPoint, method));
         //处理限制策略
         if (method.getAnnotation(LimitTime.class).type()==LimitTimeTypeEnum.NULL){
-            Object proceed = joinPoint.proceed(joinPoint.getArgs());
-            logger.info(stringBuffer.append("请求耗时:").append(System.currentTimeMillis() - startTime).append("耗秒.").toString());
-            return proceed;
+            return joinPoint.proceed(joinPoint.getArgs());
         }
-
-        Object returnObject;
         if (method.getAnnotation(LimitTime.class).type()== LimitTimeTypeEnum.LIMIT){
-            returnObject=limit(joinPoint);
-        }else {
-            returnObject=timeout(joinPoint);
+            return limit(joinPoint);
         }
-        logger.info(stringBuffer.append("请求耗时:" + (System.currentTimeMillis() - startTime) + "耗秒.").toString());
-        return returnObject;
+        return timeout(joinPoint);
     }
 
     /**
@@ -150,41 +138,5 @@ public class LimitTimeAspect {
         });
     }
 
-    /**
-     * 获取请求参数
-     * @param joinPoint
-     * @param method
-     * @return
-     */
-    private String getParamsStr(ProceedingJoinPoint joinPoint,Method method){
-        StringBuffer stringBuffer=new StringBuffer();
-        List args = filter(joinPoint.getArgs(), method);
-        if (args!=null&&args.size() > 0) {
-            for (Object arg : args) {
-                stringBuffer.append("请求参数:" + GsonUtils.toJSON(arg)+ ",");
-            }
-        }
-        return stringBuffer.toString();
-    }
-
-    /**
-     * 请求参数过滤
-     * @param args
-     * @param targetMethod
-     * @return
-     */
-    private List filter(Object[] args, Method targetMethod) {
-        Annotation[][] annotationList = targetMethod.getParameterAnnotations();
-        List list=new ArrayList();
-        for (int i = 0; i < annotationList.length; i++) {
-            for (int j = 0; j < annotationList[i].length; j++) {
-                if (annotationList[i][j].annotationType() == RequestBody.class||
-                        annotationList[i][j].annotationType() == PathVariable.class) {
-                    list.add(args[i]);
-                }
-            }
-        }
-        return list;
-    }
 
 }

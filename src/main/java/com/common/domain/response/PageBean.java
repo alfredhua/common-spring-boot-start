@@ -3,9 +3,12 @@ package com.common.domain.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Setter
 @Getter
-public class PageBean<T> implements java.io.Serializable {
+public class PageBean<T> implements Serializable {
 
 
     private int page_num=0;
@@ -16,7 +19,7 @@ public class PageBean<T> implements java.io.Serializable {
 
     private int offset;
 
-    private java.util.List<T> list;
+    private List<T> list;
 
 
 }
