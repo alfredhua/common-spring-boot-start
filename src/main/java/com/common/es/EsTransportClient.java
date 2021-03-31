@@ -74,7 +74,7 @@ public class EsTransportClient<T> {
         }
         indexBeans.setPage_num(page);
         indexBeans.setPage_size(pageSize);
-        indexBeans.setTotal(response.getHits().getTotalHits());
+//        indexBeans.setTotal(response.getHits().);
         return indexBeans;
     }
 

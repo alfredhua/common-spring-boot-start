@@ -1,22 +1,3 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        maven{
-            url 'http://maven.aliyun.com/nexus/content/groups/public'
-        }
-        mavenCentral()
-        jcenter()
-    }
-}
-
-apply plugin: 'java'
-apply plugin: 'maven'
-
-group 'com.common'
-version '1.0.0'
-
-sourceCompatibility = 1.8
-
 repositories {
     mavenLocal()
     maven{
@@ -24,7 +5,14 @@ repositories {
     }
     mavenCentral()
     jcenter()
+    apply(plugin: "java-library")
+    apply(plugin: 'maven-publish')
 }
+
+group 'com.common'
+version '1.0.0'
+sourceCompatibility = 1.8
+
 ext{
     lombokVersion="1.18.6"
     springBootVersion = "2.2.5.RELEASE"
@@ -37,22 +25,21 @@ ext{
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-    compile("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
-    compile("org.redisson:redisson-spring-boot-starter:$redissonVersion")
-    compile("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
-    compile("org.springframework.boot:spring-boot-starter-amqp:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:$springBootVersion")
+    implementation("org.redisson:redisson-spring-boot-starter:$redissonVersion")
+    implementation("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-amqp:$springBootVersion")
 
-
-    compile("org.elasticsearch.client:transport:$transportVersion")
+    implementation("org.elasticsearch.client:transport:$transportVersion")
 
     compile("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor ("org.projectlombok:lombok:$lombokVersion")
 
-    compile("org.apache.httpcomponents:httpclient:$httpclientVersion")
-    compile ("javax.mail:mail:$mailVersion")
-    compile ("redis.clients:jedis:$jedisVersion")
-    compile("com.google.code.gson:gson:$gsonVersion")
+    implementation("org.apache.httpcomponents:httpclient:$httpclientVersion")
+    implementation ("javax.mail:mail:$mailVersion")
+    implementation ("redis.clients:jedis:$jedisVersion")
+    implementation("com.google.code.gson:gson:$gsonVersion")
     testCompile ('junit:junit:4.12')
 
 }
