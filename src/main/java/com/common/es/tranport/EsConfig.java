@@ -1,4 +1,4 @@
-package com.common.es;
+package com.common.es.tranport;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;

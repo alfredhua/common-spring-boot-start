@@ -1,4 +1,4 @@
-package com.common.es;
+package com.common.es.tranport;
 
 import com.common.domain.response.PageBean;
 import com.common.util.GsonUtils;

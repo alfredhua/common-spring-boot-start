@@ -22,6 +22,7 @@ ext{
     jedisVersion="2.9.1"
     redissonVersion="3.13.2"
     transportVersion="6.8.12"
+    restHighVersion="7.1.1"
 }
 
 dependencies {
@@ -32,6 +33,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-amqp:$springBootVersion")
 
     implementation("org.elasticsearch.client:transport:$transportVersion")
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:$restHighVersion")
 
     compile("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor ("org.projectlombok:lombok:$lombokVersion")

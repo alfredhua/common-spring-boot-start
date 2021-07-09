@@ -1,4 +1,4 @@
-package com.common.es;
+package com.common.es.tranport;
 
 import lombok.Getter;
 import lombok.Setter;
